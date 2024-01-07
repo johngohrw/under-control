@@ -28,9 +28,6 @@ export default function PublicLayout({ children }: LayoutProps) {
         <div className="flex flex-row"></div>
         <div>{children}</div>
       </div>
-      <style jsx global>
-        {``}
-      </style>
     </>
   );
 }

@@ -7,19 +7,6 @@ import { SignInOutButton } from "@/components/SignInOutButton";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-const navItems: NavItemsProps = {
-  home: {
-    label: "Home",
-    href: "/app",
-    exactMatch: true,
-  },
-  expenses: {
-    label: "Expenses",
-    href: "/app/expenses",
-    exactMatch: false,
-  },
-};
-
 export default function PrivateLayout({ children }: LayoutProps) {
   const { data: session } = useSession();
   const router = useRouter();
@@ -40,3 +27,21 @@ export default function PrivateLayout({ children }: LayoutProps) {
     </div>
   );
 }
+
+const navItems: NavItemsProps = {
+  home: {
+    label: "Home",
+    href: "/app",
+    exactMatch: true,
+  },
+  expenses: {
+    label: "Expenses",
+    href: "/app/expenses",
+    exactMatch: false,
+  },
+  insights: {
+    label: "Insights",
+    href: "/app/insights",
+    exactMatch: false,
+  },
+};

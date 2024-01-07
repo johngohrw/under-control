@@ -1,3 +1,4 @@
+import { ContentPadding } from "@/components/ContentPadding";
 import { cn } from "@/lib/utils";
 import { ReactGenericHTMLElementProps } from "@/types";
 
