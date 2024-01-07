@@ -11,7 +11,9 @@ import { useRouter } from "next/navigation";
 
 export default function PublicLayout({
   children,
-}: ReactGenericHTMLElementProps) {
+}: {
+  children: React.ReactNode;
+}) {
   const { data: session } = useSession();
   const router = useRouter();
 

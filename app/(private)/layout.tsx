@@ -3,32 +3,43 @@
 import { DarkModeToggle } from "@/components/DarkModeToggle";
 import { MainNav, NavItemsProps } from "@/components/MainNav";
 import { SignInOutButton } from "@/components/SignInOutButton";
-import { ReactGenericHTMLElementProps } from "@/types";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function PrivateLayout({
   children,
-}: ReactGenericHTMLElementProps) {
+}: {
+  children: React.ReactNode;
+}) {
   const { data: session } = useSession();
   const router = useRouter();
 
-  if (!session) {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (!session) {
+      router.push("/");
+    }
+  }, [session, router]);
+
   return (
     <div className={`flex flex-col max-h-screen`}>
-      <div className="flex flex-row justify-between items-center border-b p-2">
-        <MainNav navItems={navItems} />
-        <div className="flex flex-row gap-2">
-          <DarkModeToggle />
-          <SignInOutButton />
-        </div>
-      </div>
+      <PrivateNav />
       <main className="relative flex-grow overflow-auto">{children}</main>
     </div>
   );
 }
+
+export const PrivateNav = () => {
+  return (
+    <div className="flex flex-row justify-between items-center border-b p-2">
+      <MainNav navItems={navItems} />
+      <div className="flex flex-row gap-2">
+        <DarkModeToggle />
+        <SignInOutButton />
+      </div>
+    </div>
+  );
+};
 
 const navItems: NavItemsProps = {
   home: {
