@@ -4,7 +4,7 @@ import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 
-export function SignInOutButton({ ...props }) {
+export function SignInOutButton({ label = "", ...props }) {
   const { data: session } = useSession();
   return (
     <Button
@@ -12,7 +12,7 @@ export function SignInOutButton({ ...props }) {
       onClick={session ? () => signOut() : () => signIn("google")}
       {...props}
     >
-      {session ? "Sign out" : "Sign in"}
+      {label || (session ? "Sign out" : "Sign in")}
     </Button>
   );
 }

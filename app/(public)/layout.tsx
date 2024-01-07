@@ -1,13 +1,17 @@
 "use client";
 
-import { LayoutProps } from "@/.next/types/app/layout";
+import { Brand } from "@/components/Brand";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
 import { SignInOutButton } from "@/components/SignInOutButton";
+import { ReactGenericHTMLElementProps } from "@/types";
 
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function PublicLayout({ children }: LayoutProps) {
+export default function PublicLayout({
+  children,
+}: ReactGenericHTMLElementProps) {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -16,18 +20,17 @@ export default function PublicLayout({ children }: LayoutProps) {
   }
 
   return (
-    <>
-      <div className={`flex flex-col`}>
-        <div className="flex flex-row justify-between items-center border-b p-2">
-          <div>UC</div>
-          <div className="flex flex-row gap-2">
-            <DarkModeToggle />
-            <SignInOutButton />
-          </div>
+    <div className={`flex flex-col max-h-screen`}>
+      <div className="flex flex-row justify-between items-center border-b p-2">
+        <Link href="/" className="flex-shrink-0">
+          <Brand className="w-[120px]" />
+        </Link>
+        <div className="flex flex-row gap-2">
+          <DarkModeToggle />
+          <SignInOutButton />
         </div>
-        <div className="flex flex-row"></div>
-        <div>{children}</div>
       </div>
-    </>
+      <main className="relative flex-grow overflow-auto">{children}</main>
+    </div>
   );
 }
