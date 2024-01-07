@@ -41,9 +41,9 @@ const navItems: NavItemsProps = {
     href: "/app/expenses",
     exactMatch: false,
   },
-  insights: {
-    label: "Insights",
-    href: "/app/insights",
+  data: {
+    label: "Data",
+    href: "/app/data",
     exactMatch: false,
   },
 };

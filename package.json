@@ -5,12 +5,9 @@
   "private": true,
   "scripts": {
     "dev": "node ./scripts/generateExports.js && prisma generate && next dev",
-    "build": "node ./scripts/generateExports.js && prisma generate && prisma db push && prisma db seed && next build",
+    "build": "node ./scripts/generateExports.js && prisma generate && prisma db push && next build",
     "start": "next start",
     "lint": "next lint"
-  },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
