@@ -1,18 +1,19 @@
-import "./globals.css";
-import { Inter } from "next/font/google";
+import "../styles/globals.css";
+
+import { Inter as FontSans } from "next/font/google";
+
 import Providers from "./providers";
+import { cn } from "@/lib/utils";
 
 export const metadata = {
-  metadataBase: new URL("https://postgres-prisma.vercel.app"),
-  title: "Vercel Postgres Demo with Prisma",
-  description:
-    "A simple Next.js app with Vercel Postgres as the database and Prisma as the ORM",
+  metadataBase: new URL("https://under-control-expenses-tracker.vercel.app"),
+  title: "Under Control",
+  description: "Description for Under Control",
 };
 
-const inter = Inter({
-  variable: "--font-inter",
+export const fontSans = FontSans({
   subsets: ["latin"],
-  display: "swap",
+  variable: "--font-sans",
 });
 
 export default function RootLayout({
@@ -22,7 +23,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.variable}>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>
