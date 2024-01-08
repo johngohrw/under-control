@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ReactGenericHTMLElementProps } from "@/types";
 
-export default function Home() {
+export default function HomePublic() {
   return (
     <div className="flex flex-col">
       <HomeSection className="text-center">

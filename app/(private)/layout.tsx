@@ -3,6 +3,7 @@
 import { DarkModeToggle } from "@/components/DarkModeToggle";
 import { MainNav, NavItemsProps } from "@/components/MainNav";
 import { SignInOutButton } from "@/components/SignInOutButton";
+import { UserNav } from "@/components/examples/user-nav";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -36,6 +37,9 @@ export const PrivateNav = () => {
       <div className="flex flex-row gap-2">
         <DarkModeToggle />
         <SignInOutButton />
+        <div className="flex items-center">
+          <UserNav />
+        </div>
       </div>
     </div>
   );
