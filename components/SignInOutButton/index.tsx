@@ -1,25 +1,18 @@
 "use client";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSignIn } from "@/hooks/useSignIn";
 import { Button } from "../ui/button";
 
-export function SignInOutButton({ label = "", ...props }) {
-  const { data: session, status } = useSession();
-
-  const labelMap: { [key in typeof status]: string } = {
-    loading: "loading",
-    authenticated: "Sign out",
-    unauthenticated: "Sign in",
-  };
-
+export function SignInOutButton({ ...props }) {
+  const { label, onClick, status } = useSignIn();
   return (
     <Button
       disabled={status === "loading"}
-      onClick={session ? () => signOut() : () => signIn()}
+      onClick={onClick}
       variant="outline"
       {...props}
     >
-      {labelMap[status]}
+      {label}
     </Button>
   );
 }

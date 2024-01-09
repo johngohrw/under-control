@@ -1,11 +1,12 @@
 "use client";
 
+import { Brand } from "@/components/Brand";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
 import { Loading } from "@/components/Loading";
 import { MainNav, NavItemsProps } from "@/components/MainNav";
-import { SignInOutButton } from "@/components/SignInOutButton";
 import { UserNav } from "@/components/examples/user-nav";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -36,10 +37,14 @@ export default function PrivateLayout({
 export const PrivateNav = () => {
   return (
     <div className="flex flex-row justify-between items-center border-b py-2 px-4 md:px-8">
+      <Link href="/" className="flex-shrink-0">
+        <Brand className="w-[120px]" />
+      </Link>
       <MainNav navItems={navItems} />
       <div className="flex flex-row gap-2">
-        <DarkModeToggle />
-        <SignInOutButton />
+        <div className="hidden md:flex">
+          <DarkModeToggle />
+        </div>
         <div className="flex items-center">
           <UserNav />
         </div>

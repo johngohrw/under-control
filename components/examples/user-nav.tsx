@@ -1,3 +1,4 @@
+import { useSignIn } from "@/hooks/useSignIn";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
@@ -12,6 +13,7 @@ import {
 } from "../ui/dropdown-menu";
 
 export function UserNav() {
+  const { label: authLabel, onClick: authOnClick } = useSignIn();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -48,8 +50,8 @@ export function UserNav() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          Log out
+        <DropdownMenuItem onClick={authOnClick}>
+          {authLabel}
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

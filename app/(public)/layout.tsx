@@ -23,7 +23,7 @@ export default function PublicLayout({
 
   return (
     <div className={`flex flex-col max-h-screen h-full`}>
-      <div className="flex flex-row justify-between items-center border-b p-2">
+      <div className="flex flex-row justify-between items-center border-b py-2 px-4 md:px-8">
         <Link href="/" className="flex-shrink-0">
           <Brand className="w-[120px]" />
         </Link>
