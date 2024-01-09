@@ -1,6 +1,7 @@
 "use client";
 
 import { DarkModeToggle } from "@/components/DarkModeToggle";
+import { Loading } from "@/components/Loading";
 import { MainNav, NavItemsProps } from "@/components/MainNav";
 import { SignInOutButton } from "@/components/SignInOutButton";
 import { UserNav } from "@/components/examples/user-nav";
@@ -13,26 +14,28 @@ export default function PrivateLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
     if (!session) {
-      router.push("/");
+      router.replace("/");
     }
   }, [session, router]);
 
   return (
-    <div className={`flex flex-col max-h-screen`}>
+    <div className={`flex flex-col max-h-screen h-full`}>
       <PrivateNav />
-      <main className="relative flex-grow overflow-auto">{children}</main>
+      <div className="relative flex-grow overflow-auto h-full">
+        {status !== "authenticated" ? <Loading /> : children}
+      </div>
     </div>
   );
 }
 
 export const PrivateNav = () => {
   return (
-    <div className="flex flex-row justify-between items-center border-b p-2">
+    <div className="flex flex-row justify-between items-center border-b py-2 px-4 md:px-8">
       <MainNav navItems={navItems} />
       <div className="flex flex-row gap-2">
         <DarkModeToggle />

@@ -9,7 +9,7 @@ import { ReactGenericHTMLElementProps } from "@/types";
 export default function HomePublic() {
   return (
     <div className="flex flex-col">
-      <HomeSection className="text-center">
+      <HomeSection innerClassName="flex flex-col items-center text-center">
         <h1 className="mt-4 text-4xl font-bold mb-2">UNDER CONTROL</h1>
         <p className="text-muted-foreground text-sm mb-1">
           Effortless expenses tracking for busy individuals
@@ -33,7 +33,11 @@ export default function HomePublic() {
         </div>
       </HomeSection>
 
-      <HomeSection id="ux" className="text-center bg-blue-500 bg-opacity-20">
+      <HomeSection
+        id="ux"
+        className="bg-blue-500 bg-opacity-20"
+        innerClassName="flex flex-col items-center text-center"
+      >
         <h2 className="text-3xl font-bold mb-2">Lightning Fast UX</h2>
         <p className="text-muted-foreground text-sm max-w-[400px]">
           With a user experience optimized for least amount of inputs,{" "}
@@ -42,7 +46,11 @@ export default function HomePublic() {
           your previous time.
         </p>
       </HomeSection>
-      <HomeSection id="vis" className="text-center bg-pink-300 bg-opacity-20">
+      <HomeSection
+        id="vis"
+        className="bg-pink-300 bg-opacity-20"
+        innerClassName="flex flex-col items-center text-center"
+      >
         <h2 className="text-3xl font-bold mb-2">Insightful Visualisations</h2>
         <p className="text-muted-foreground text-sm max-w-[400px]">
           Understand and optimize your spending habits at a glance.{" "}
@@ -50,7 +58,11 @@ export default function HomePublic() {
           of fully-customisable charts, graphs, and tables.
         </p>
       </HomeSection>
-      <HomeSection id="data" className="text-center bg-green-300 bg-opacity-20">
+      <HomeSection
+        id="data"
+        className="bg-green-300 bg-opacity-20"
+        innerClassName="flex flex-col items-center text-center"
+      >
         <h2 className="text-3xl font-bold mb-2">Your Data is Yours</h2>
         <p className="text-muted-foreground text-sm max-w-[400px]">
           Bulk import and export will always be available. Unlike other
@@ -58,7 +70,10 @@ export default function HomePublic() {
           forever by making it hard to integrate with other solutions.
         </p>
       </HomeSection>
-      <HomeSection id="cta" className="text-center">
+      <HomeSection
+        id="cta"
+        innerClassName="flex flex-col items-center text-center"
+      >
         <h2 className="text-3xl font-bold mb-2">It&apos;s Free</h2>
         <p className="text-muted-foreground text-sm max-w-[400px] mb-1">
           If you&apos;re still wondering - yes it is.{" "}
@@ -75,11 +90,13 @@ export default function HomePublic() {
 const HomeSection = ({
   children,
   className = "",
+  innerClassName = "",
   ...props
-}: ReactGenericHTMLElementProps) => {
+}: { innerClassName?: string } & ReactGenericHTMLElementProps) => {
   return (
     <ContentPadding
       className={cn("flex flex-col items-center justify-center", className)}
+      innerClassName={innerClassName}
       style={{
         minHeight: "calc(100vh - 50px)",
       }}

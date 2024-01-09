@@ -2,6 +2,7 @@
 
 import { Brand } from "@/components/Brand";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
+import { Loading } from "@/components/Loading";
 import { SignInOutButton } from "@/components/SignInOutButton";
 import { ReactGenericHTMLElementProps } from "@/types";
 
@@ -14,15 +15,15 @@ export default function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   if (session) {
-    router.push("/app");
+    router.replace("/app");
   }
 
   return (
-    <div className={`flex flex-col max-h-screen`}>
+    <div className={`flex flex-col max-h-screen h-full`}>
       <div className="flex flex-row justify-between items-center border-b p-2">
         <Link href="/" className="flex-shrink-0">
           <Brand className="w-[120px]" />
@@ -32,7 +33,9 @@ export default function PublicLayout({
           <SignInOutButton />
         </div>
       </div>
-      <main className="relative flex-grow overflow-auto">{children}</main>
+      <main className="relative flex-grow overflow-auto h-full">
+        {status !== "unauthenticated" ? <Loading /> : children}
+      </main>
     </div>
   );
 }

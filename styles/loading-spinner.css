@@ -1,0 +1,19 @@
+.__loading-spinner {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-block;
+  border-top: 3px solid hsl(var(--foreground));
+  border-right: 3px solid transparent;
+  box-sizing: border-box;
+  animation: __loading-spinner-rotation 1s linear infinite;
+}
+
+@keyframes __loading-spinner-rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
