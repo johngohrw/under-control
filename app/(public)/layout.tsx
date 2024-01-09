@@ -4,7 +4,6 @@ import { Brand } from "@/components/Brand";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
 import { Loading } from "@/components/Loading";
 import { SignInOutButton } from "@/components/SignInOutButton";
-import { ReactGenericHTMLElementProps } from "@/types";
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";

@@ -1,7 +1,6 @@
 "use client";
 
-import { signIn, signOut } from "next-auth/react";
-import { useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 
 export function SignInOutButton({ label = "", ...props }) {

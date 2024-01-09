@@ -1,12 +1,9 @@
 import { Metadata } from "next";
 
+import { ContentPadding } from "@/components/ContentPadding";
 import { CalendarDateRangePicker } from "@/components/examples/date-range-picker";
-import { MainNav } from "@/components/examples/main-nav";
 import { Overview } from "@/components/examples/overview";
 import { RecentSales } from "@/components/examples/recent-sales";
-import { Search } from "@/components/examples/search";
-import TeamSwitcher from "@/components/examples/team-switcher";
-import { UserNav } from "@/components/examples/user-nav";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,7 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ContentPadding } from "@/components/ContentPadding";
 
 export const metadata: Metadata = {
   title: "Dashboard",

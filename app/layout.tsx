@@ -2,8 +2,8 @@ import "../styles/globals.css";
 
 import { Inter as FontSans } from "next/font/google";
 
-import Providers from "./providers";
 import { cn } from "@/lib/utils";
+import Providers from "./providers";
 
 export const metadata = {
   metadataBase: new URL("https://under-control-expenses-tracker.vercel.app"),
