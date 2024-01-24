@@ -8,6 +8,7 @@ import { SignInOutButton } from "@/components/SignInOutButton";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function PublicLayout({
   children,
@@ -17,9 +18,11 @@ export default function PublicLayout({
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  if (session) {
-    router.replace("/app");
-  }
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/app");
+    }
+  }, [status, router]);
 
   return (
     <div className={`flex flex-col max-h-screen h-full`}>

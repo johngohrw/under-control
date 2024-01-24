@@ -19,10 +19,10 @@ export default function PrivateLayout({
   const router = useRouter();
 
   useEffect(() => {
-    if (!session) {
+    if (status === "unauthenticated") {
       router.replace("/");
     }
-  }, [session, router]);
+  }, [status, router]);
 
   return (
     <div className={`flex flex-col max-h-screen h-full`}>

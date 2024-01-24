@@ -25,7 +25,7 @@ export default function Dashboard() {
       <ContentPadding>
         <div className="flex-1 mb-4 lg:p-8 lg:pt-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-2">
-            <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+            <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
             <div className="flex flex-wrap items-center gap-2">
               <CalendarDateRangePicker />
               <Button>Download</Button>
