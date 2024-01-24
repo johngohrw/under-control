@@ -37,6 +37,7 @@ import {
 } from "@prisma/client";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 
@@ -74,12 +75,8 @@ export function ExpensesForm({
     },
   });
 
-  const { mutate: createExpense, isPending } = useMutation({
-    mutationFn: (params: object) =>
-      fetch(`/api/transactions`, {
-        method: "POST",
-        body: JSON.stringify(params),
-      }),
+  const { mutate: createTransaction, isPending } = useMutation({
+    mutationFn: (params: object) => axios.post(`/api/transactions`, params),
     onSuccess: (res) => {
       console.log("success", res); // todo: show toast
       router.push("/app/expenses/");
@@ -87,7 +84,7 @@ export function ExpensesForm({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    createExpense({
+    createTransaction({
       ...values,
       userId,
     });

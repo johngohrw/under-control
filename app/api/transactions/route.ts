@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 import { getUserId } from "../user/route";
 
 export async function POST(req: Request) {
-  const body = await req.json();
+  const params = await req.json();
   await prisma.transaction.create({
-    data: body,
+    data: params,
   });
   return NextResponse.json({ message: "Transaction created" }, { status: 200 });
 }
@@ -17,6 +17,17 @@ export async function GET() {
   });
   return NextResponse.json(
     { message: "Transactions fetched", data: transactions },
+    { status: 200 }
+  );
+}
+
+export async function DELETE(req: Request) {
+  const { id } = await req.json();
+  const transactions = await prisma.transaction.delete({
+    where: { id: id },
+  });
+  return NextResponse.json(
+    { message: "Deleted successfully", data: transactions },
     { status: 200 }
   );
 }
