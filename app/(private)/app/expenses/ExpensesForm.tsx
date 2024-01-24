@@ -29,22 +29,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import {
+  Category,
+  Currency,
+  PaymentMethod,
+  PrismaClient,
+} from "@prisma/client";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
-
-// id              String         @id @default(cuid())
-// date            DateTime
-// amount          Int
-// memo            String?
-// category        Category?      @relation(fields: [categoryId], references: [id])
-// categoryId      String?
-// user            User?          @relation(fields: [userId], references: [id])
-// userId          String?
-// paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
-// paymentMethodId String?
-// currency        Currency      @relation(fields: [currencyId], references: [id])
-// currencyId      String
-// createdAt       DateTime       @default(now())
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   amount: z.coerce.number().min(0, {
@@ -52,32 +46,51 @@ const formSchema = z.object({
   }),
   date: z.date(),
   memo: z.string(),
-  categoryId: z.string().optional(),
-  paymentMethodId: z.string().optional(),
+  categoryId: z.string(),
+  paymentMethodId: z.string(),
   currencyId: z.string(),
 });
 
-export function ExpensesForm() {
+const prisma = new PrismaClient();
+
+export function ExpensesForm({
+  categories,
+  paymentMethods,
+  currencies,
+  userId,
+}: {
+  categories: Category[];
+  paymentMethods: PaymentMethod[];
+  currencies: Currency[];
+  userId: string;
+}) {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       amount: 0,
       date: new Date(),
       memo: "",
-      currencyId: "MYR",
     },
   });
 
-  const { watch } = form;
-  const watchAll = watch();
+  const { mutate: createExpense, isPending } = useMutation({
+    mutationFn: (params: object) =>
+      fetch(`/api/transactions`, {
+        method: "POST",
+        body: JSON.stringify(params),
+      }),
+    onSuccess: (res) => {
+      console.log("success", res); // todo: show toast
+      router.push("/app/expenses/");
+    },
+  });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const params = {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    createExpense({
       ...values,
-      userId: "TODO",
-    };
-
-    console.log(params);
+      userId,
+    });
   }
 
   return (
@@ -127,26 +140,11 @@ export function ExpensesForm() {
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="food">Food</SelectItem>
-                    <SelectItem value="anothercat">Another Cat</SelectItem>
-                    <SelectItem value="anothercat2">Another Cat 2</SelectItem>
-                    <SelectItem value="anothercat3">Another Cat 3</SelectItem>
-                    <SelectItem value="anothercat4">Another Cat 4</SelectItem>
-                    <SelectItem value="anothercat5">Another Cat 5</SelectItem>
-                    <SelectItem value="anothercat6">Another Cat 6</SelectItem>
-                    <SelectItem value="anothercat7">Another Cat 7</SelectItem>
-                    <SelectItem value="anothercat8">Another Cat 8</SelectItem>
-                    <SelectItem value="anothercat9">Another Cat 9</SelectItem>
-                    <SelectItem value="anothercat10">Another Cat 10</SelectItem>
-                    <SelectItem value="anothercat11">Another Cat 11</SelectItem>
-                    <SelectItem value="anothercat12">Another Cat 12</SelectItem>
-                    <SelectItem value="anothercat13">Another Cat 13</SelectItem>
-                    <SelectItem value="anothercat14">Another Cat 14</SelectItem>
-                    <SelectItem value="anothercat15">Another Cat 15</SelectItem>
-                    <SelectItem value="anothercat16">Another Cat 16</SelectItem>
-                    <SelectItem value="anothercat17">Another Cat 17</SelectItem>
-                    <SelectItem value="anothercat18">Another Cat 18</SelectItem>
-                    <SelectItem value="anothercat19">Another Cat 19</SelectItem>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -211,26 +209,11 @@ export function ExpensesForm() {
                     <SelectValue placeholder="Payment Method" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="food">Food</SelectItem>
-                    <SelectItem value="anothercat">Another Cat</SelectItem>
-                    <SelectItem value="anothercat2">Another Cat 2</SelectItem>
-                    <SelectItem value="anothercat3">Another Cat 3</SelectItem>
-                    <SelectItem value="anothercat4">Another Cat 4</SelectItem>
-                    <SelectItem value="anothercat5">Another Cat 5</SelectItem>
-                    <SelectItem value="anothercat6">Another Cat 6</SelectItem>
-                    <SelectItem value="anothercat7">Another Cat 7</SelectItem>
-                    <SelectItem value="anothercat8">Another Cat 8</SelectItem>
-                    <SelectItem value="anothercat9">Another Cat 9</SelectItem>
-                    <SelectItem value="anothercat10">Another Cat 10</SelectItem>
-                    <SelectItem value="anothercat11">Another Cat 11</SelectItem>
-                    <SelectItem value="anothercat12">Another Cat 12</SelectItem>
-                    <SelectItem value="anothercat13">Another Cat 13</SelectItem>
-                    <SelectItem value="anothercat14">Another Cat 14</SelectItem>
-                    <SelectItem value="anothercat15">Another Cat 15</SelectItem>
-                    <SelectItem value="anothercat16">Another Cat 16</SelectItem>
-                    <SelectItem value="anothercat17">Another Cat 17</SelectItem>
-                    <SelectItem value="anothercat18">Another Cat 18</SelectItem>
-                    <SelectItem value="anothercat19">Another Cat 19</SelectItem>
+                    {paymentMethods.map((method) => (
+                      <SelectItem key={method.id} value={method.id}>
+                        {method.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -255,26 +238,11 @@ export function ExpensesForm() {
                     <SelectValue placeholder="Currency" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="MYR">Malaysian Ringgit</SelectItem>
-                    <SelectItem value="anothercat">Another Cat</SelectItem>
-                    <SelectItem value="anothercat2">Another Cat 2</SelectItem>
-                    <SelectItem value="anothercat3">Another Cat 3</SelectItem>
-                    <SelectItem value="anothercat4">Another Cat 4</SelectItem>
-                    <SelectItem value="anothercat5">Another Cat 5</SelectItem>
-                    <SelectItem value="anothercat6">Another Cat 6</SelectItem>
-                    <SelectItem value="anothercat7">Another Cat 7</SelectItem>
-                    <SelectItem value="anothercat8">Another Cat 8</SelectItem>
-                    <SelectItem value="anothercat9">Another Cat 9</SelectItem>
-                    <SelectItem value="anothercat10">Another Cat 10</SelectItem>
-                    <SelectItem value="anothercat11">Another Cat 11</SelectItem>
-                    <SelectItem value="anothercat12">Another Cat 12</SelectItem>
-                    <SelectItem value="anothercat13">Another Cat 13</SelectItem>
-                    <SelectItem value="anothercat14">Another Cat 14</SelectItem>
-                    <SelectItem value="anothercat15">Another Cat 15</SelectItem>
-                    <SelectItem value="anothercat16">Another Cat 16</SelectItem>
-                    <SelectItem value="anothercat17">Another Cat 17</SelectItem>
-                    <SelectItem value="anothercat18">Another Cat 18</SelectItem>
-                    <SelectItem value="anothercat19">Another Cat 19</SelectItem>
+                    {currencies.map((currency) => (
+                      <SelectItem key={currency.id} value={currency.id}>
+                        {currency.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -284,7 +252,9 @@ export function ExpensesForm() {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button disabled={isPending} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );

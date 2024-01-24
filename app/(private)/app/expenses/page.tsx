@@ -1,6 +1,7 @@
 import { ContentPadding } from "@/components/ContentPadding";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ExpensesList } from "./ExpensesList";
 
 export default async function Expenses() {
   return (
@@ -11,6 +12,7 @@ export default async function Expenses() {
       <Button asChild>
         <Link href="/app/expenses/add">Add</Link>
       </Button>
+      <ExpensesList />
     </ContentPadding>
   );
 }
