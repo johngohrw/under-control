@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 export async function getUserId() {
   const { user: sessionUser } = (await getServerSession(authOptions)) ?? {};
   const userResponse = await axios.get(
-    `${process.env.NEXTAUTH_URL}/api/user?email=${sessionUser?.email}`
+    `${process.env.BASE_URL}/api/user?email=${sessionUser?.email}`
   );
   const { data: user } = userResponse ?? {};
   return user.id;
