@@ -1,5 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { ContentPadding } from "@/components/ContentPadding";
+import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { ExpensesForm } from "../ExpensesForm";
 
