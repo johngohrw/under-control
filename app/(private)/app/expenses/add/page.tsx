@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { ExpensesForm } from "../ExpensesForm";
 
 export default async function AddExpense() {
+  //TODO: fix this part. use route handlers
   const { user: sessionUser } = (await getServerSession(authOptions)) ?? {};
   if (sessionUser?.email) {
     const user = await prisma?.user.findUnique({

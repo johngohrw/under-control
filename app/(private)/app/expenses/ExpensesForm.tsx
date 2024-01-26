@@ -69,7 +69,6 @@ export function ExpensesForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: 0,
       date: new Date(),
       memo: "",
     },
