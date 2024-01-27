@@ -5,6 +5,9 @@ import { DarkModeToggle } from "@/components/DarkModeToggle";
 import { Loading } from "@/components/Loading";
 import { MainNav, NavItemsProps } from "@/components/MainNav";
 import { UserNav } from "@/components/examples/user-nav";
+import { useUser } from "@/hooks/api/useUser";
+
+import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,20 +18,25 @@ export default function PrivateLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { status } = useSession();
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { status } = useSession(); // TODO: change auth verification method to cookies
+  useUser();
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.replace("/");
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
+      router.push("/");
     }
-  }, [status, router]);
+  }, [status, router, queryClient]);
 
   return (
     <div className={`flex flex-col max-h-screen h-full`}>
       <PrivateNav />
       <div className="relative flex-grow overflow-auto h-full">
-        {status !== "authenticated" ? <Loading /> : children}
+        {status === "loading" ? <Loading /> : children}
       </div>
     </div>
   );

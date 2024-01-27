@@ -28,13 +28,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+import { useCategories } from "@/hooks/api/useCategories";
+import { useCurrencies } from "@/hooks/api/useCurrencies";
+import { usePaymentMethods } from "@/hooks/api/usePaymentMethods";
 import { cn } from "@/lib/utils";
-import {
-  Category,
-  Currency,
-  PaymentMethod,
-  PrismaClient,
-} from "@prisma/client";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -52,20 +50,16 @@ const formSchema = z.object({
   currencyId: z.string(),
 });
 
-const prisma = new PrismaClient();
-
-export function ExpensesForm({
-  categories,
-  paymentMethods,
-  currencies,
-  userId,
-}: {
-  categories: Category[];
-  paymentMethods: PaymentMethod[];
-  currencies: Currency[];
-  userId: string;
-}) {
+export function ExpensesForm({}: {}) {
   const router = useRouter();
+
+  const { isFetching: categoriesisFetching, data: categories } =
+    useCategories();
+  const { isFetching: paymentMethodsisFetching, data: paymentMethods } =
+    usePaymentMethods();
+  const { isFetching: currenciesisFetching, data: currencies } =
+    useCurrencies();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -83,10 +77,7 @@ export function ExpensesForm({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    createTransaction({
-      ...values,
-      userId,
-    });
+    createTransaction(values);
   }
 
   return (
@@ -136,11 +127,17 @@ export function ExpensesForm({
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
-                      </SelectItem>
-                    ))}
+                    {categoriesisFetching ? (
+                      <div>fetching</div>
+                    ) : !categories || categories.length <= 0 ? (
+                      <div>no items</div>
+                    ) : (
+                      categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -205,11 +202,17 @@ export function ExpensesForm({
                     <SelectValue placeholder="Payment Method" />
                   </SelectTrigger>
                   <SelectContent>
-                    {paymentMethods.map((method) => (
-                      <SelectItem key={method.id} value={method.id}>
-                        {method.name}
-                      </SelectItem>
-                    ))}
+                    {paymentMethodsisFetching ? (
+                      <div>fetching</div>
+                    ) : !paymentMethods || paymentMethods.length <= 0 ? (
+                      <div>no items</div>
+                    ) : (
+                      paymentMethods.map((method) => (
+                        <SelectItem key={method.id} value={method.id}>
+                          {method.name}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -234,11 +237,17 @@ export function ExpensesForm({
                     <SelectValue placeholder="Currency" />
                   </SelectTrigger>
                   <SelectContent>
-                    {currencies.map((currency) => (
-                      <SelectItem key={currency.id} value={currency.id}>
-                        {currency.name}
-                      </SelectItem>
-                    ))}
+                    {currenciesisFetching ? (
+                      <div>fetching</div>
+                    ) : !currencies || currencies.length <= 0 ? (
+                      <div>no items</div>
+                    ) : (
+                      currencies.map((currency) => (
+                        <SelectItem key={currency.id} value={currency.id}>
+                          {currency.name}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
               </FormControl>

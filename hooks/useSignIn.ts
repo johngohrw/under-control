@@ -10,7 +10,7 @@ export const useSignIn = () => {
   };
   return {
     label: labelMap[status],
-    onClick: session ? () => signOut() : () => signIn(),
+    onClick: session ? () => signOut() : () => signIn("google"),
     status: status,
     session,
     ...rest,

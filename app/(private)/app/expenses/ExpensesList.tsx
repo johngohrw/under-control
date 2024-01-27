@@ -6,7 +6,7 @@ import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { cn, formatCurrency, getHumanReadableDate } from "@/lib/utils";
 import { ReactGenericHTMLElementProps } from "@/types";
 import { Transaction } from "@prisma/client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useMemo } from "react";
 
@@ -16,37 +16,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTransactions } from "@/hooks/api/useTransactions";
+import { groupTransactionsByDay } from "@/lib/transforms";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 
 export function ExpensesList({
   className,
   ...props
 }: ReactGenericHTMLElementProps) {
-  // Get Transactions
-  const { data: transactions, isFetched } = useQuery({
-    queryKey: ["transactions"],
-    queryFn: (): Promise<Transaction[]> =>
-      axios.get("/api/transactions").then((response) => response.data.data),
-  });
-
-  const groupByDay = (transactions: Transaction[]) => {
-    return transactions
-      .toSorted(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      )
-      .reduce((acc: { [key: string]: Transaction[] }, curr) => {
-        const date = new Date(curr.date).toDateString();
-        if (!(date in acc)) {
-          acc[date] = [];
-        }
-        acc[date].push(curr);
-        return acc;
-      }, {});
-  };
+  const { data: transactions, isFetched } = useTransactions();
 
   const dateGroupedTransactions = useMemo(
     () =>
-      transactions && transactions.length > 0 ? groupByDay(transactions) : {},
+      transactions && transactions.length > 0
+        ? groupTransactionsByDay(transactions)
+        : {},
     [transactions]
   );
 
@@ -81,7 +65,7 @@ export function ExpensesDateGroup({
 } & ReactGenericHTMLElementProps) {
   return (
     <div className={cn(``, className)} {...props}>
-      <div className="font-medium tracking-wide text-lg text-muted-foreground border-b mb-2">
+      <div className="font-medium tracking-wide text-md text-muted-foreground border-b mb-2">
         {getHumanReadableDate(dateKey)}
       </div>
       <div className="flex flex-col gap-1">
@@ -118,8 +102,10 @@ export function ExpenseListItem({
       )}
       {...props}
     >
-      <div className="flex-grow">{transaction.memo}</div>
-      <div className="font-bold">{formatCurrency(transaction.amount)}</div>
+      <div className="flex-grow text-sm">{transaction.memo}</div>
+      <div className="font-medium text-sm">
+        {formatCurrency(transaction.amount)}
+      </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="xs" className="ml-2">

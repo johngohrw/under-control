@@ -7,32 +7,35 @@ export async function POST(req: Request) {
   if (error) return error;
 
   const params = await req.json();
-  await prisma.transaction.create({
+  await prisma.paymentMethod.create({
     data: { userId, ...params },
   });
-  return NextResponse.json({ message: "Transaction created" }, { status: 200 });
+  return NextResponse.json(
+    { message: "Payment method created" },
+    { status: 200 }
+  );
 }
 
 export async function GET(req: Request) {
   const { userId, error } = (await getUserIdFromRequest(req)) ?? {};
   if (error) return error;
 
-  const transactions = await prisma.transaction.findMany({
+  const paymentMethods = await prisma.paymentMethod.findMany({
     where: { userId: userId },
   });
   return NextResponse.json(
-    { message: "Transactions fetched", data: transactions },
+    { message: "Payment methods fetched", data: paymentMethods },
     { status: 200 }
   );
 }
 
 export async function DELETE(req: Request) {
   const { id } = await req.json();
-  const transactions = await prisma.transaction.delete({
+  const paymentMethod = await prisma.paymentMethod.delete({
     where: { id: id },
   });
   return NextResponse.json(
-    { message: "Deleted successfully", data: transactions },
+    { message: "Payment method deleted successfully", data: paymentMethod },
     { status: 200 }
   );
 }

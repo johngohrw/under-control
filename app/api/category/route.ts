@@ -7,32 +7,32 @@ export async function POST(req: Request) {
   if (error) return error;
 
   const params = await req.json();
-  await prisma.transaction.create({
+  await prisma.category.create({
     data: { userId, ...params },
   });
-  return NextResponse.json({ message: "Transaction created" }, { status: 200 });
+  return NextResponse.json({ message: "Category created" }, { status: 200 });
 }
 
 export async function GET(req: Request) {
   const { userId, error } = (await getUserIdFromRequest(req)) ?? {};
   if (error) return error;
 
-  const transactions = await prisma.transaction.findMany({
+  const categories = await prisma.category.findMany({
     where: { userId: userId },
   });
   return NextResponse.json(
-    { message: "Transactions fetched", data: transactions },
+    { message: "Categories fetched", data: categories },
     { status: 200 }
   );
 }
 
 export async function DELETE(req: Request) {
   const { id } = await req.json();
-  const transactions = await prisma.transaction.delete({
+  const category = await prisma.category.delete({
     where: { id: id },
   });
   return NextResponse.json(
-    { message: "Deleted successfully", data: transactions },
+    { message: "Category deleted successfully", data: category },
     { status: 200 }
   );
 }

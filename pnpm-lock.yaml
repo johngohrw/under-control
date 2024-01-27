@@ -44,6 +44,9 @@ dependencies:
   '@tanstack/react-query':
     specifier: ^5.17.19
     version: 5.17.19(react@18.2.0)
+  '@tanstack/react-query-devtools':
+    specifier: ^5.17.21
+    version: 5.17.21(@tanstack/react-query@5.17.19)(react@18.2.0)
   '@types/js-cookie':
     specifier: ^3.0.6
     version: 3.0.6
@@ -104,6 +107,9 @@ dependencies:
   next-auth:
     specifier: ^4.24.5
     version: 4.24.5(next@13.5.4)(react-dom@18.2.0)(react@18.2.0)
+  next-client-cookies:
+    specifier: ^1.1.0
+    version: 1.1.0(next@13.5.4)(react@18.2.0)
   next-themes:
     specifier: ^0.2.1
     version: 0.2.1(next@13.5.4)(react-dom@18.2.0)(react@18.2.0)
@@ -1372,6 +1378,21 @@ packages:
 
   /@tanstack/query-core@5.17.19:
     resolution: {integrity: sha512-Lzw8FUtnLCc9Jwz0sw9xOjZB+/mCCmJev38v2wHMUl/ioXNIhnNWeMxu0NKUjIhAd62IRB3eAtvxAGDJ55UkyA==}
+    dev: false
+
+  /@tanstack/query-devtools@5.17.21:
+    resolution: {integrity: sha512-WWfcnNjTEqcuAS5GyKkVGkseuES6yd197MJWGImBu+MoCjWPqxSXKCCfm+utSXJauJUGm7xoMmhqCphiQdjf8w==}
+    dev: false
+
+  /@tanstack/react-query-devtools@5.17.21(@tanstack/react-query@5.17.19)(react@18.2.0):
+    resolution: {integrity: sha512-Ri1AuWpN67eyPdMTlPxx1TMGNUaxTHrGv0ll0S20ZObz/Xms5wfANV3c6OX0HZTY0igudP1k5jpRLXNkd249mg==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.17.19
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-devtools': 5.17.21
+      '@tanstack/react-query': 5.17.19(react@18.2.0)
+      react: 18.2.0
     dev: false
 
   /@tanstack/react-query@5.17.19(react@18.2.0):
@@ -3272,6 +3293,17 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       uuid: 8.3.2
+    dev: false
+
+  /next-client-cookies@1.1.0(next@13.5.4)(react@18.2.0):
+    resolution: {integrity: sha512-e/rqQTXHSFuvUJELMeCDgM7dWW6IUNOGr7noWyRSgE/5l033UaqseDrjShfRZYG45JnrYKoX653OdXTJ8cn+NA==}
+    peerDependencies:
+      next: '>= 13.0.0'
+      react: '>= 16.8.0'
+    dependencies:
+      js-cookie: 3.0.5
+      next: 13.5.4(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
     dev: false
 
   /next-themes@0.2.1(next@13.5.4)(react-dom@18.2.0)(react@18.2.0):
