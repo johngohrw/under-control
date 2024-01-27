@@ -11,7 +11,7 @@ export default async function Expenses() {
           Expenses
         </h1>
         <Button asChild>
-          <Link href="/app/expenses/add">New Transaction</Link>
+          <Link href="/app/expenses/add">New Expense</Link>
         </Button>
       </div>
 

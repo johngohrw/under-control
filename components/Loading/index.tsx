@@ -1,18 +1,22 @@
+import { cn } from "@/lib/utils";
 import { ReactGenericHTMLElementProps } from "@/types";
 
 export const Loading = ({
+  type = "spinner",
   className = "",
   ...props
-}: ReactGenericHTMLElementProps) => {
+}: { type?: "spinner" | "dots" } & ReactGenericHTMLElementProps) => {
   return (
     <>
       <div
-        className={`flex items-center justify-center w-full h-full ${className}`}
+        className={cn(
+          "flex items-center justify-center w-full h-full",
+          className
+        )}
         {...props}
       >
-        <span className="__loading-spinner" />
+        <span className={`__loading-${type}`} />
       </div>
-      <style jsx>{``}</style>
     </>
   );
 };

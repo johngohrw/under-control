@@ -9,10 +9,8 @@ import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -29,6 +27,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { BadgeSelectInput } from "@/components/BadgeSelectInput";
+import { FormFieldLabel } from "@/components/FormFieldLabel";
 import { useCategories } from "@/hooks/api/useCategories";
 import { useCurrencies } from "@/hooks/api/useCurrencies";
 import { usePaymentMethods } from "@/hooks/api/usePaymentMethods";
@@ -38,6 +38,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   amount: z.coerce.number().min(0, {
@@ -53,13 +54,6 @@ const formSchema = z.object({
 export function ExpensesForm({}: {}) {
   const router = useRouter();
 
-  const { isFetching: categoriesisFetching, data: categories } =
-    useCategories();
-  const { isFetching: paymentMethodsisFetching, data: paymentMethods } =
-    usePaymentMethods();
-  const { isFetching: currenciesisFetching, data: currencies } =
-    useCurrencies();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,6 +61,36 @@ export function ExpensesForm({}: {}) {
       memo: "",
     },
   });
+  const { watch, setValue } = form;
+
+  const { isFetching: categoriesIsFetching, data: categories } =
+    useCategories();
+  const { isFetching: paymentMethodsIsFetching, data: paymentMethods } =
+    usePaymentMethods();
+  const { isFetching: currenciesIsFetching, data: currencies } =
+    useCurrencies();
+
+  useEffect(() => {
+    if (categories && categories.length > 0 && !watch("categoryId")) {
+      setValue("categoryId", categories[0].id);
+    }
+  }, [categories, watch, setValue]);
+
+  useEffect(() => {
+    if (
+      paymentMethods &&
+      paymentMethods.length > 0 &&
+      !watch("paymentMethodId")
+    ) {
+      setValue("paymentMethodId", paymentMethods[0].id);
+    }
+  }, [paymentMethods, watch, setValue]);
+
+  useEffect(() => {
+    if (currencies && currencies.length > 0 && !watch("currencyId")) {
+      setValue("currencyId", currencies[0].id);
+    }
+  }, [currencies, watch, setValue]);
 
   const { mutate: createTransaction, isPending } = useMutation({
     mutationFn: (params: object) => axios.post(`/api/transactions`, params),
@@ -82,17 +106,16 @@ export function ExpensesForm({}: {}) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormFieldLabel>Amount</FormFieldLabel>
               <FormControl>
-                <Input placeholder="0" type="number" min={0} {...field} />
+                <Input placeholder="0.00" type="number" min={0} {...field} />
               </FormControl>
-              <FormDescription>How much?</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -103,11 +126,10 @@ export function ExpensesForm({}: {}) {
           name="memo"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Memo</FormLabel>
+              <FormFieldLabel>Memo</FormFieldLabel>
               <FormControl>
                 <Input placeholder="" {...field} />
               </FormControl>
-              <FormDescription>Describe this transaction</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -118,31 +140,21 @@ export function ExpensesForm({}: {}) {
           name="categoryId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormFieldLabel>Category</FormFieldLabel>
+              <BadgeSelectInput
+                items={categories ?? []}
+                renderLabel={(cat) => cat?.name}
+                currentValue={watch("categoryId")}
+                isLoading={categoriesIsFetching}
+                isEmpty={!(categories && categories.length > 0)}
+                keyName="id"
+                onSelect={(cat) => setValue("categoryId", cat.id)}
+              />
+
               <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger className="">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categoriesisFetching ? (
-                      <div>fetching</div>
-                    ) : !categories || categories.length <= 0 ? (
-                      <div>no items</div>
-                    ) : (
-                      categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
+                <Input type="text" className="hidden" {...field} />
               </FormControl>
-              <FormDescription>Select a category</FormDescription>
+
               <FormMessage />
             </FormItem>
           )}
@@ -153,7 +165,7 @@ export function ExpensesForm({}: {}) {
           name="date"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date</FormLabel>
+              <FormFieldLabel>Date</FormFieldLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -182,7 +194,7 @@ export function ExpensesForm({}: {}) {
                   />
                 </PopoverContent>
               </Popover>
-              <FormDescription>When did you buy it?</FormDescription>
+
               <FormMessage />
             </FormItem>
           )}
@@ -191,33 +203,18 @@ export function ExpensesForm({}: {}) {
         <FormField
           control={form.control}
           name="paymentMethodId"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
-              <FormLabel>Payment Method</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger className="">
-                    <SelectValue placeholder="Payment Method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {paymentMethodsisFetching ? (
-                      <div>fetching</div>
-                    ) : !paymentMethods || paymentMethods.length <= 0 ? (
-                      <div>no items</div>
-                    ) : (
-                      paymentMethods.map((method) => (
-                        <SelectItem key={method.id} value={method.id}>
-                          {method.name}
-                        </SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormDescription>Select a payment method</FormDescription>
+              <FormFieldLabel>Payment Method</FormFieldLabel>
+              <BadgeSelectInput
+                items={paymentMethods ?? []}
+                renderLabel={(pm) => pm?.name}
+                currentValue={watch("paymentMethodId")}
+                isLoading={paymentMethodsIsFetching}
+                isEmpty={!(paymentMethods && paymentMethods.length > 0)}
+                keyName="id"
+                onSelect={(pm) => setValue("paymentMethodId", pm.id)}
+              />
               <FormMessage />
             </FormItem>
           )}
@@ -228,20 +225,24 @@ export function ExpensesForm({}: {}) {
           name="currencyId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Currency</FormLabel>
+              <FormFieldLabel>Currency</FormFieldLabel>
               <FormControl>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={watch("currencyId")}
                 >
                   <SelectTrigger className="">
                     <SelectValue placeholder="Currency" />
                   </SelectTrigger>
                   <SelectContent>
-                    {currenciesisFetching ? (
-                      <div>fetching</div>
+                    {currenciesIsFetching ? (
+                      <SelectItem disabled value=" ">
+                        Loading...
+                      </SelectItem>
                     ) : !currencies || currencies.length <= 0 ? (
-                      <div>no items</div>
+                      <SelectItem disabled value=" ">
+                        No available items
+                      </SelectItem>
                     ) : (
                       currencies.map((currency) => (
                         <SelectItem key={currency.id} value={currency.id}>
@@ -252,14 +253,13 @@ export function ExpensesForm({}: {}) {
                   </SelectContent>
                 </Select>
               </FormControl>
-              <FormDescription>Select a currency</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button disabled={isPending} type="submit">
-          Submit
+        <Button className="w-full" disabled={isPending} type="submit">
+          {isPending ? "Please wait..." : "Add"}
         </Button>
       </form>
     </Form>

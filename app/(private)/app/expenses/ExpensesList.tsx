@@ -35,7 +35,7 @@ export function ExpensesList({
   );
 
   return (
-    <div className={`flex flex-col gap-4 ${className}`} {...props}>
+    <div className={cn("flex flex-col gap-4", className)} {...props}>
       {!isFetched || !transactions ? (
         <Loading className="min-h-[200px]" />
       ) : transactions.length <= 0 ? (
