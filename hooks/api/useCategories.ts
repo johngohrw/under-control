@@ -7,5 +7,6 @@ export function useCategories() {
     queryKey: ["categories"],
     queryFn: (): Promise<Category[]> =>
       axios.get("/api/category").then((response) => response.data.data),
+    staleTime: 24 * 60 * 60 * 1000, // 24 hours
   });
 }

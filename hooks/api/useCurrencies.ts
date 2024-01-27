@@ -7,5 +7,6 @@ export function useCurrencies() {
     queryKey: ["currencies"],
     queryFn: (): Promise<Currency[]> =>
       axios.get("/api/currency").then((response) => response.data.data),
+    staleTime: 24 * 60 * 60 * 1000, // 24 hours
   });
 }

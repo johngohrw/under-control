@@ -16,7 +16,10 @@ export async function serverGetUserId() {
 
 export async function getUserIdFromRequest(req: Request) {
   const res = await req.headers.get("cookie");
-  const sessionToken = parseCookie(res || "").get("next-auth.session-token");
+  const cookieObj = parseCookie(res || "");
+  const sessionToken =
+    cookieObj.get("next-auth.session-token") ||
+    cookieObj.get("__Secure-next-auth.session-token");
 
   if (!sessionToken) {
     return {
