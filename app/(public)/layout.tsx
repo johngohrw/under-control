@@ -35,7 +35,10 @@ export default function PublicLayout({
           <SignInOutButton />
         </div>
       </div>
-      <main className="relative flex-grow overflow-auto h-full">
+      <main
+        className="relative flex-grow overflow-auto h-full"
+        id="public-layout-content-container"
+      >
         {status !== "unauthenticated" ? <Loading /> : children}
       </main>
     </div>

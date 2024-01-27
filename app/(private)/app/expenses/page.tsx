@@ -14,7 +14,6 @@ export default async function Expenses() {
           <Link href="/app/expenses/add">New Expense</Link>
         </Button>
       </div>
-
       <ExpensesList />
     </ContentPadding>
   );

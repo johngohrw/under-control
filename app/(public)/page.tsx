@@ -5,10 +5,17 @@ import { SignInOutButton } from "@/components/SignInOutButton";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ReactGenericHTMLElementProps } from "@/types";
+import { useLayoutEffect } from "react";
 
 export default function HomePublic() {
+  useLayoutEffect(() => {
+    document
+      .getElementById("public-layout-content-container")
+      ?.classList.add("__scroll-snap-y");
+  }, []);
+
   return (
-    <div className="flex flex-col">
+    <>
       <HomeSection innerClassName="flex flex-col items-center text-center">
         <h1 className="mt-4 text-4xl font-bold mb-2">UNDER CONTROL</h1>
         <p className="text-muted-foreground text-sm mb-1">
@@ -83,7 +90,7 @@ export default function HomePublic() {
         </p>
         <SignInOutButton label="Sign me up" />
       </HomeSection>
-    </div>
+    </>
   );
 }
 

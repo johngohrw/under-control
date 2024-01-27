@@ -1,3 +1,11 @@
 @import url("tailwind.css");
 @import url("modern-reset.css");
 @import url("loading.css");
+
+.__scroll-snap-y {
+  scroll-snap-type: y mandatory;
+}
+
+.__scroll-snap-y > * {
+  scroll-snap-align: start;
+}

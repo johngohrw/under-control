@@ -1,7 +1,8 @@
+import { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export function useUser() {
+export function useUser(): User | null {
   const { isFetched, data } = useQuery({
     queryFn: () => axios.get(`/api/user`),
     queryKey: ["user"],
